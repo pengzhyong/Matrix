@@ -242,11 +242,30 @@ Matrix Matrix::inv()
 	return Multi;
 }
 
+Matrix Matrix::dot(const Matrix& B)
+{
+	if (mRows != B.mRows || mCols != B.mCols)
+	{
+		printf("Dimision not match\n");
+		return *this;
+	}
+	Matrix C(mRows, mCols);
+	for (int r = 0; r < mRows; r++)
+	{
+		for (int c = 0; c < mCols; c++)
+		{
+			C.mat[r][c] = this->mat[r][c] * B.mat[r][c];
+		}
+	}
+	return C;
+}
+
+
 Matrix& Matrix::operator=(const Matrix& B)
 {
 	if (B.rows() != mRows || B.cols() != mCols)
 	{
-		printf("Dimishion not match in operator '=' !");
+		printf("Dimishion not match in operator '=' !\n");
 		return *this;
 	}
 	for (int r = 0; r < mRows; r++)
@@ -257,6 +276,21 @@ Matrix& Matrix::operator=(const Matrix& B)
 		}
 	}
 	return *this;
+}
+
+Matrix Matrix::operator*(const Matrix& B)
+{
+	return this->multi(B);
+}
+
+double* Matrix::operator[](int i)
+{
+	if (i < 0 || i > this->mRows)
+	{
+		printf("Matrix Index Out of Range\n");
+		return nullptr;
+	}
+	return this->mat[i];
 }
 
 std::ostream& operator<<(std::ostream& os, const Matrix& matr)
@@ -271,3 +305,86 @@ std::ostream& operator<<(std::ostream& os, const Matrix& matr)
 	}
 	return os;
 }
+
+Matrix operator*(double a, const Matrix& A)
+{
+	Matrix C(A.mRows, A.mCols);
+	for (int r = 0; r < A.mRows; r++)
+	{
+		for (int c = 0; c < A.mCols; c++)
+		{
+			C.mat[r][c] = a * A.mat[r][c];
+		}
+	}
+	return C;
+}
+
+Matrix operator*(const Matrix& A, double a)
+{
+	Matrix C(A.mRows, A.mCols);
+	for (int r = 0; r < A.mRows; r++)
+	{
+		for (int c = 0; c < A.mCols; c++)
+		{
+			C.mat[r][c] = a * A.mat[r][c];
+		}
+	}
+	return C;
+}
+
+Matrix Matrix::operator+(const Matrix& B)
+{
+	if (mRows != B.mRows || mCols != B.mCols)
+	{
+		printf("Dimision not match\n");
+		return *this;
+	}
+	Matrix C(mRows, mCols);
+	for (int r = 0; r < mRows; r++)
+	{
+		for (int c = 0;  c < mCols; c++)
+		{
+			C.mat[r][c] = this->mat[r][c] + B.mat[r][c];
+		}
+	}
+	return C;
+}
+
+Matrix Matrix::operator-(const Matrix& B)
+{
+	if (mRows != B.mRows || mCols != B.mCols)
+	{
+		printf("Dimision not match\n");
+		return *this;
+	}
+	Matrix C(mRows, mCols);
+	for (int r = 0; r < mRows; r++)
+	{
+		for (int c = 0; c < mCols; c++)
+		{
+			C.mat[r][c] = this->mat[r][c] - B.mat[r][c];
+		}
+	}
+	return C;
+}
+
+bool Matrix::operator==(const Matrix& B)
+{
+	if (mRows != B.mRows || mCols != B.mCols)
+		return false;
+	for (int r = 0; r < mRows; r++)
+	{
+		for (int c = 0; c < mCols; c++)
+		{
+			if (zero(mat[r][c] - B.mat[r][c]))
+				return false;
+		}
+	}
+	return true;
+}
+
+bool Matrix::operator!=(const Matrix& B)
+{
+	return !(*this == B);
+}
+
