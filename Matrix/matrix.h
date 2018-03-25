@@ -24,6 +24,7 @@ public:
 	Matrix& operator=(const Matrix& B);
 	Matrix operator*(const Matrix& B);
 	double* operator[](int i);
+	const double* operator[](int i) const;
 	Matrix operator+(const Matrix& B);
 	Matrix operator-(const Matrix& B);
 	bool operator==(const Matrix& B);

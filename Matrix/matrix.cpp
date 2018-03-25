@@ -293,6 +293,17 @@ double* Matrix::operator[](int i)
 	return this->mat[i];
 }
 
+const double* Matrix::operator[](int i) const
+{
+	if (i < 0 || i > this->mRows)
+	{
+		printf("Matrix Index Out of Range\n");
+		return nullptr;
+	}
+	return this->mat[i];
+}
+
+
 std::ostream& operator<<(std::ostream& os, const Matrix& matr)
 {
 	for (int r = 0; r < matr.mRows; r++)
